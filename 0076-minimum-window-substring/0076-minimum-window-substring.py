@@ -1,26 +1,35 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        from collections import Counter
-        t_count=Counter(t)
-        required=len(t_count)
-        formed=0
-        l=0
-        r=0
-        window_counts={}
-        ans=float('inf'),None,None
-        while r<len(s):
-            character=s[r]
-            window_counts[character]=window_counts.get(character,0)+1
-            if character in t_count and window_counts[character]==t_count[character]:
-                formed+=1
-                while l<=r and formed==required:
-                    character=s[l]
-                    if r - l + 1 < ans[0]:
-                        ans = (r - l + 1, l, r)
-                    window_counts[character]-=1
-                    if character in t_count and window_counts[character]<t_count[character]:
-                        formed-=1
-                    l+=1
-            r+=1
+        countT = {}
+        countS = {}
+        min_substring = [0, len(s)]
+        l = 0
+        matched = 0
 
-        return "" if ans[0]==float('inf') else s[ans[1]:ans[2]+1]
+        for c in t:
+            countT[c] = countT.get(c, 0) + 1
+
+        for r in range(len(s)):
+            if s[r] in countT:
+                countS[s[r]] = countS.get(s[r], 0) + 1
+                if countS[s[r]] == countT[s[r]]:
+                    matched += 1
+
+            while matched == len(countT):
+                if min_substring[1] - min_substring[0] > r - l:
+                    min_substring = [l, r]
+
+                if s[l] in countS:
+                    countS[s[l]] -= 1
+                    if countS[s[l]] < countT[s[l]]:
+                        matched -= 1
+                l += 1
+
+        if min_substring[1] == len(s):
+            return ""
+
+        return s[min_substring[0]: min_substring[1] + 1]
+                
+
+
+
