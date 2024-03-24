@@ -11,6 +11,5 @@ class Solution:
                 l.append(i | j)
         m = 0
         for i in l:
-            if m < len(i):
-                m = len(i)
+            m =max(m,len(i))
         return m
