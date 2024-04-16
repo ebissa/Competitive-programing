@@ -17,7 +17,7 @@ class Solution:
             temp=temp.next
         if list1:
             temp.next=list1
-        elif list2:
+        if list2:
             temp.next=list2
         return dummy.next
 
